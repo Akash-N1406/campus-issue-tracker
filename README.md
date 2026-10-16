@@ -53,7 +53,6 @@ campus-issue-tracker/
 └── README.md
 ```
 
-> Create the `screenshots/` directory and add the six required evidence images using the exact filenames above. Do not commit private keys, seed phrases, passwords, or other credentials. The screenshots previously captured should be copied into this folder and renamed to match the relevant evidence. The failed-transaction screenshot must show a genuine failed/reverted transaction; do not label a successful transaction as a failure.
 
 ## 5. Deployment Network and Contract Address
 
