@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Issue Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js"></script>
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div>
+            <h1>Campus Issue Tracker</h1>
+            <p>Decentralized campus maintenance reporting</p>
+        </div>
+        <button id="connectWallet">Connect MetaMask</button>
+    </header>
+
+    <main class="container">
+        <section class="wallet-panel">
+            <p><strong>Wallet:</strong> <span id="walletAddress">Not connected</span></p>
+            <p><strong>Network:</strong> <span id="networkName">Not connected</span></p>
+            <p id="notice" role="status" aria-live="polite">Connect your wallet to get started.</p>
+        </section>
+
+        <section class="stats">
+            <article class="stat-card">
+                <span>Total reported issues</span>
+                <strong id="issueCount">—</strong>
+            </article>
+            <article class="stat-card">
+                <span>Your role</span>
+                <strong id="userRole">Unknown</strong>
+            </article>
+        </section>
+
+        <section class="panel">
+            <h2>Report a campus issue</h2>
+            <form id="issueForm">
+                <label for="title">Issue title</label>
+                <input id="title" maxlength="100" required placeholder="e.g. Broken classroom fan">
+
+                <label for="description">Description</label>
+                <textarea id="description" maxlength="1000" required
+                    placeholder="Describe the issue and its location"></textarea>
+
+                <label for="category">Category</label>
+                <select id="category" required>
+                    <option value="">Select a category</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Plumbing">Plumbing</option>
+                    <option value="Cleaning">Cleaning</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <button type="submit" id="submitIssue">Submit issue</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="section-heading">
+                <h2>Reported issues</h2>
+                <button id="refreshIssues" class="secondary">Refresh</button>
+            </div>
+            <div id="issuesList" class="issues-list">
+                <p class="empty-state">Connect your wallet to load issues.</p>
+            </div>
+        </section>
+
+        <section class="panel" id="adminPanel" hidden>
+            <h2>Administrator controls</h2>
+            <p>Only the contract administrator can update issue status.</p>
+
+            <form id="statusForm">
+                <label for="issueId">Issue ID</label>
+                <input id="issueId" type="number" min="1" step="1" required>
+
+                <label for="newStatus">New status</label>
+                <select id="newStatus" required>
+                    <option value="0">Submitted</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Resolved</option>
+                </select>
+
+                <button type="submit">Update status</button>
+            </form>
+        </section>
+
+        <footer>
+            <p>Built with Solidity, Ethers.js and Ganache.</p>
+            <p>Transactions are recorded on the local blockchain.</p>
+        </footer>
+    </main>
+</body>
+
+</html>
