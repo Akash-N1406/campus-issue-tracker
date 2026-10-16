@@ -1,18 +1,19 @@
-
 # Deployment Details
 
 ## Network
-- Network: Ganache Local
-- RPC URL: http://127.0.0.1:8545
-- Chain ID: 1337
+- Network: Remix VM (local development environment)
+- Deployment environment: Remix IDE
 
 ## Smart Contract
-- Contract: CampusIssueTracker
-- Contract Address: 0x4ED348c05294073F8B9D47292a966dFabAcb6B2C
-- Deployer/Admin: 0x7D55cD66e17557b08Ea36B3e47cdA3E9Afd8e8f9
-- Deployment Block: 1
-- Deployment Transaction:
-  0x66a5e08852a2aa4b2be055cce109d2e32de76d431f9dcf65e901fc5f7fd52bdb
+- Contract: `CampusIssueTracker`
+- Contract Address: `0xf7C058C5C2aED617eF53D865CD8131A35711dC31`
+- Deployer/Admin: `0x7D55cD66e17557b08Ea36B3e47cdA3E9Afd8e8f9`
 
 ## Compiler
 - Solidity: 0.8.34
+
+## Notes
+- The frontend is configured to use the contract address listed above.
+- Remix VM deployments are temporary and may be reset.
+- Redeploying the contract requires updating `CONTRACT_ADDRESS` in `frontend/app.js` and this document.
+- This deployment is intended for local demonstration and testing.
