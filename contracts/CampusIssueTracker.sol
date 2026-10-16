@@ -38,7 +38,10 @@ contract CampusIssueTracker {
     );
 
     modifier onlyAdmin() {
-        require(msg.sender == admin, "Only admin can perform this action");
+        require(
+            msg.sender == admin,
+            "Only admin can perform this action"
+        );
         _;
     }
 
@@ -52,7 +55,10 @@ contract CampusIssueTracker {
         string calldata category
     ) external returns (uint256) {
         require(bytes(title).length > 0, "Title cannot be empty");
-        require(bytes(description).length > 0, "Description cannot be empty");
+        require(
+            bytes(description).length > 0,
+            "Description cannot be empty"
+        );
         require(bytes(category).length > 0, "Category cannot be empty");
 
         uint256 id = nextIssueId++;
@@ -75,21 +81,47 @@ contract CampusIssueTracker {
     function getIssue(uint256 id)
         external
         view
-        returns (Issue memory)
+        returns (
+            uint256 issueId,
+            address reporter,
+            string memory title,
+            string memory description,
+            string memory category,
+            Status status,
+            uint256 createdAt
+        )
     {
-        require(id > 0 && id < nextIssueId, "Issue does not exist");
-        return issues[id];
+        require(
+            id > 0 && id < nextIssueId,
+            "Issue does not exist"
+        );
+
+        Issue storage issue = issues[id];
+
+        return (
+            issue.id,
+            issue.reporter,
+            issue.title,
+            issue.description,
+            issue.category,
+            issue.status,
+            issue.createdAt
+        );
     }
 
     function getIssueCount() external view returns (uint256) {
         return nextIssueId - 1;
     }
 
-    function updateIssueStatus(uint256 id, Status newStatus)
-        external
-        onlyAdmin
-    {
-        require(id > 0 && id < nextIssueId, "Issue does not exist");
+    function updateIssueStatus(
+        uint256 id,
+        Status newStatus
+    ) external onlyAdmin {
+        require(
+            id > 0 && id < nextIssueId,
+            "Issue does not exist"
+        );
+
         require(
             uint256(newStatus) <= uint256(Status.Resolved),
             "Invalid status"

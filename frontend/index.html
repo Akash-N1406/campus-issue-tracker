@@ -1,100 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Issue Tracker</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js"></script>
-    <script src="app.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1220">
+  <title>Campus Issue Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js"></script>
+  <script src="app.js" defer></script>
 </head>
-
 <body>
+  <div class="app-shell">
     <header class="topbar">
-        <div>
-            <h1>Campus Issue Tracker</h1>
-            <p>Decentralized campus maintenance reporting</p>
-        </div>
-        <button id="connectWallet">Connect MetaMask</button>
+      <a class="brand" href="#" aria-label="Campus Issue Tracker home">
+        <span class="brand-mark">C</span>
+        <span><strong>Campus</strong><small>Issue Tracker</small></span>
+      </a>
+      <div class="wallet-area">
+        <span id="connectionStatus" class="connection-status"><span class="status-dot"></span> Not connected</span>
+        <button id="connectWalletBtn" class="button button-primary">Connect MetaMask</button>
+      </div>
     </header>
 
-    <main class="container">
-        <section class="wallet-panel">
-            <p><strong>Wallet:</strong> <span id="walletAddress">Not connected</span></p>
-            <p><strong>Network:</strong> <span id="networkName">Not connected</span></p>
-            <p id="notice" role="status" aria-live="polite">Connect your wallet to get started.</p>
-        </section>
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">CAMPUS SERVICES · ON-CHAIN REPORTING</p>
+          <h1>A better campus<br><span>starts with a report.</span></h1>
+          <p class="hero-description">Report maintenance and campus issues, track their status, and keep every update transparent on the blockchain.</p>
+          <div class="hero-meta">
+            <span><span class="meta-icon">◆</span> Transparent records</span>
+            <span><span class="meta-icon">↗</span> Wallet authenticated</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="art-card">
+            <span class="art-check">✓</span>
+            <div><strong>Issue tracking</strong><small>Recorded on-chain</small></div>
+            <span class="art-arrow">↗</span>
+          </div>
+          <div class="art-chip chip-top">BLOCKCHAIN VERIFIED</div>
+          <div class="art-chip chip-bottom"><span class="pulse"></span> LIVE STATUS</div>
+        </div>
+      </section>
 
-        <section class="stats">
-            <article class="stat-card">
-                <span>Total reported issues</span>
-                <strong id="issueCount">—</strong>
-            </article>
-            <article class="stat-card">
-                <span>Your role</span>
-                <strong id="userRole">Unknown</strong>
-            </article>
-        </section>
+      <section class="stats-grid" aria-label="Issue statistics">
+        <article class="stat-card">
+          <div class="stat-label">Total issues</div>
+          <div id="totalIssues" class="stat-value">—</div>
+          <div class="stat-foot">Recorded on this contract</div>
+          <span class="stat-symbol symbol-blue">▤</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-label">Submitted</div>
+          <div id="submittedIssues" class="stat-value">—</div>
+          <div class="stat-foot">Awaiting action</div>
+          <span class="stat-symbol symbol-purple">◷</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-label">In progress</div>
+          <div id="inProgressIssues" class="stat-value">—</div>
+          <div class="stat-foot">Being addressed</div>
+          <span class="stat-symbol symbol-orange">↻</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-label">Resolved</div>
+          <div id="resolvedIssues" class="stat-value">—</div>
+          <div class="stat-foot">Marked as complete</div>
+          <span class="stat-symbol symbol-green">✓</span>
+        </article>
+      </section>
 
-        <section class="panel">
-            <h2>Report a campus issue</h2>
-            <form id="issueForm">
-                <label for="title">Issue title</label>
-                <input id="title" maxlength="100" required placeholder="e.g. Broken classroom fan">
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
 
-                <label for="description">Description</label>
-                <textarea id="description" maxlength="1000" required
-                    placeholder="Describe the issue and its location"></textarea>
-
-                <label for="category">Category</label>
-                <select id="category" required>
-                    <option value="">Select a category</option>
-                    <option value="Maintenance">Maintenance</option>
-                    <option value="Electrical">Electrical</option>
-                    <option value="Plumbing">Plumbing</option>
-                    <option value="Cleaning">Cleaning</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <button type="submit" id="submitIssue">Submit issue</button>
-            </form>
-        </section>
-
-        <section class="panel">
-            <div class="section-heading">
-                <h2>Reported issues</h2>
-                <button id="refreshIssues" class="secondary">Refresh</button>
+      <section class="content-grid">
+        <section class="panel report-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">HAVE YOU SPOTTED AN ISSUE?</p>
+              <h2>Report an issue</h2>
+              <p class="muted">Your report is submitted to the smart contract.</p>
             </div>
-            <div id="issuesList" class="issues-list">
-                <p class="empty-state">Connect your wallet to load issues.</p>
-            </div>
-        </section>
-
-        <section class="panel" id="adminPanel" hidden>
-            <h2>Administrator controls</h2>
-            <p>Only the contract administrator can update issue status.</p>
-
-            <form id="statusForm">
-                <label for="issueId">Issue ID</label>
-                <input id="issueId" type="number" min="1" step="1" required>
-
-                <label for="newStatus">New status</label>
-                <select id="newStatus" required>
-                    <option value="0">Submitted</option>
-                    <option value="1">In Progress</option>
-                    <option value="2">Resolved</option>
+            <span class="heading-icon">＋</span>
+          </div>
+          <form id="issueForm">
+            <label for="issueTitle">Issue title <span class="required">*</span></label>
+            <input id="issueTitle" name="title" type="text" maxlength="120" placeholder="e.g. Broken classroom fan" required>
+            <div class="field-row">
+              <label for="issueCategory">Category <span class="required">*</span>
+                <select id="issueCategory" name="category" required>
+                  <option value="Maintenance">Maintenance</option>
+                  <option value="Electrical">Electrical</option>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Cleanliness">Cleanliness</option>
+                  <option value="Internet">Internet / Wi-Fi</option>
+                  <option value="Facilities">Facilities</option>
+                  <option value="Safety">Safety</option>
+                  <option value="Other">Other</option>
                 </select>
-
-                <button type="submit">Update status</button>
-            </form>
+              </label>
+            </div>
+            <label for="issueDescription">Description <span class="required">*</span></label>
+            <textarea id="issueDescription" name="description" rows="5" maxlength="1000" placeholder="Describe the issue and where it occurred..." required></textarea>
+            <div class="form-footer">
+              <span class="helper-text">A wallet confirmation is required.</span>
+              <button id="submitIssueBtn" class="button button-primary" type="submit">Submit report <span>↗</span></button>
+            </div>
+          </form>
         </section>
 
-        <footer>
-            <p>Built with Solidity, Ethers.js and Ganache.</p>
-            <p>Transactions are recorded on the local blockchain.</p>
-        </footer>
+        <section class="panel issues-panel">
+          <div class="issues-heading">
+            <div>
+              <p class="eyebrow">CAMPUS FEEDBACK</p>
+              <h2>Reported issues</h2>
+              <p class="muted">Live records retrieved from the blockchain.</p>
+            </div>
+            <button id="refreshBtn" class="button button-secondary" type="button" title="Refresh issues">↻ <span>Refresh</span></button>
+          </div>
+          <div class="filter-row">
+            <label class="search-box" for="searchIssues"><span>⌕</span><input id="searchIssues" type="search" placeholder="Search issues..." aria-label="Search issues"></label>
+            <select id="statusFilter" aria-label="Filter by status">
+              <option value="all">All statuses</option>
+              <option value="0">Submitted</option>
+              <option value="1">In progress</option>
+              <option value="2">Resolved</option>
+            </select>
+          </div>
+          <div id="issuesList" class="issues-list">
+            <div class="empty-state">
+              <div class="empty-icon">▤</div>
+              <strong>Connect your wallet to load issues</strong>
+              <p>Blockchain records will appear here after connecting MetaMask.</p>
+            </div>
+          </div>
+          <div class="list-footer"><span id="listCount">0 issues</span><span>Powered by Ethereum-compatible blockchain</span></div>
+        </section>
+      </section>
+
+      <section class="admin-note">
+        <span class="admin-note-icon">⌘</span>
+        <div><strong>Administrator controls</strong><p>Only the wallet that deployed the contract can change an issue's status. Connect using the admin account to see status controls on each issue.</p></div>
+      </section>
     </main>
-</body>
 
+    <footer class="footer">
+      <span>© <span id="year"></span> Campus Issue Tracker</span>
+      <span>Built with Solidity · Ethers.js · MetaMask</span>
+    </footer>
+  </div>
+</body>
 </html>
